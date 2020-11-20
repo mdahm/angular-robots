@@ -67,6 +67,10 @@ export class Cell {
         return '???';
     }
   }
+
+  imageUrl() {
+    return '../../assets/icons/trash.png';
+  }
 }
 
 export enum Figure {
