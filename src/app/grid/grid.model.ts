@@ -16,17 +16,11 @@ export class Grid {
     this.cells = rows;
   }
 
-  public rows(): Cell[][] {
-    return deepCopy(this.cells);
-  }
+  public rows = () => deepCopy(this.cells);
 
-  public columns(row: number): Array<Cell> {
-    return deepCopy(this.cells[row]);
-  }
+  public columns = (row: number) => deepCopy(this.cells[row]);
 
-  public cell(row: number, column: number): Cell {
-    return this.cells[row][column];
-  }
+  public cell = (row: number, column: number) => this.cells[row][column];
 
   public populate(): void {
     for (let x = 0; x < ROWS; x++) {
@@ -35,6 +29,9 @@ export class Grid {
       }
     }
   }
+
+  public columnCount = () => COLUMNS;
+  public rowCount = () => ROWS;
 }
 
 export class Cell {
@@ -59,7 +56,7 @@ export class Cell {
   }
 }
 
-enum Figure {
+export enum Figure {
   EMPTY,
   ROBOT_ALIVE,
   ROBOT_TRASH,

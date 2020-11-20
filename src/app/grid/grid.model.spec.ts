@@ -1,4 +1,4 @@
-import {COLUMNS, Grid, ROWS} from './grid.model';
+import {Cell, COLUMNS, Figure, Grid, ROWS} from './grid.model';
 
 describe('Grid', () => {
   const objectUnderTest = new Grid();
@@ -14,6 +14,16 @@ describe('Grid', () => {
 
     objectUnderTest.populate();
     cell = objectUnderTest.cell(2, 2);
+    expect(cell.color).toBe('white');
+  });
+
+  test('immutable', () => {
+    objectUnderTest.populate();
+
+    const cells = objectUnderTest.columns(2);
+    cells[2] = new Cell('red', Figure.ROBOT_TRASH);
+
+    const cell = objectUnderTest.cell(2, 2);
     expect(cell.color).toBe('white');
   });
 });
