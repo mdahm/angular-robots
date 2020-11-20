@@ -56,7 +56,7 @@ export class Cell {
   public name(): string {
     switch (this.content) {
       case Figure.EMPTY:
-        return '';
+        return 'empty';
       case Figure.PLAYER:
         return 'Player';
       case Figure.ROBOT_ALIVE:
@@ -68,9 +68,7 @@ export class Cell {
     }
   }
 
-  imageUrl() {
-    return '../../assets/icons/trash.png';
-  }
+  imageName = () => this.name().toLowerCase() + '-small.png';
 }
 
 export enum Figure {

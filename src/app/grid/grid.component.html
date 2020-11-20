@@ -13,7 +13,6 @@
     *ngFor="let cell of grid.allCells()"
     [style.background]="cell.color"
   >
-    <img src="{{cell.imageUrl()}}" alt="Image">
-    {{cell.name()}}
+    <img src="../../assets/icons/{{cell.imageName()}}" alt="Image">
   </mat-grid-tile>
 </mat-grid-list>
