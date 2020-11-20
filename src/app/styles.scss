@@ -1,0 +1,16 @@
+.icon {
+  background-position: center;
+  background-repeat: no-repeat;
+
+  &.player {
+    background-image: url('../assets/icons/player-small.png');
+  }
+
+  &.robot {
+    background-image: url('../assets/icons/robot-small.png');
+  }
+
+  &.trash {
+    background-image: url('../assets/icons/trash-small.png');
+  }
+}
