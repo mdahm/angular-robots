@@ -1,7 +1,8 @@
-import {deepCopy, randomEnum} from '../globals';
+import {deepCopy, random, randomEnum} from '../globals';
 
 export const COLUMNS = 30;
 export const ROWS = 15;
+export const ROBOTS = 5;
 
 export class Grid {
   private readonly cells: Cell[][];
@@ -22,6 +23,8 @@ export class Grid {
 
   public cell = (row: number, column: number) => this.cells[row][column];
 
+  private setCell = (row: number, column: number, cell: Cell) => this.cells[row][column] = cell;
+
   public allCells(): Array<Cell> {
     const result = new Array<Cell>();
 
@@ -31,13 +34,26 @@ export class Grid {
       }
     }
 
+    // Should be copy
     return result;
   }
 
   public populate(): void {
     for (let x = 0; x < ROWS; x++) {
       for (let y = 0; y < COLUMNS; y++) {
-        this.cells[x][y] = new Cell('white', randomEnum(Figure));
+        this.setCell(x, y, new Cell('white', Figure.EMPTY));
+      }
+    }
+
+    let robotsLeft = ROBOTS;
+
+    while (robotsLeft > 0) {
+      let row = random(0, ROWS - 1);
+      let column = random(0, COLUMNS - 1);
+
+      if (this.cell(row, column).empty()) {
+        this.setCell(row, column, new Cell('white', Figure.ROBOT_ALIVE));
+        robotsLeft--;
       }
     }
   }
@@ -69,6 +85,8 @@ export class Cell {
   }
 
   imageName = () => this.name().toLowerCase() + '-small.png';
+
+  empty = () => this.content == Figure.EMPTY;
 }
 
 export enum Figure {
