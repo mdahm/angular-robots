@@ -1,7 +1,7 @@
 import {deepCopy, randomEnum} from '../globals';
 
-export const COLUMNS = 12;
-export const ROWS = 20;
+export const COLUMNS = 30;
+export const ROWS = 15;
 
 export class Grid {
   private readonly cells: Cell[][];
@@ -22,6 +22,18 @@ export class Grid {
 
   public cell = (row: number, column: number) => this.cells[row][column];
 
+  public allCells(): Array<Cell> {
+    const result = new Array<Cell>();
+
+    for (let i = 0; i < ROWS; i++) {
+      for (let j = 0; j < COLUMNS; j++) {
+        result.push(this.cells[i][j]);
+      }
+    }
+
+    return result;
+  }
+
   public populate(): void {
     for (let x = 0; x < ROWS; x++) {
       for (let y = 0; y < COLUMNS; y++) {
@@ -38,7 +50,8 @@ export class Cell {
   constructor(
     public color: string = 'white',
     public content: Figure = Figure.EMPTY
-  ) {  }
+  ) {
+  }
 
   public name(): string {
     switch (this.content) {
