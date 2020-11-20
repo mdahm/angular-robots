@@ -1,4 +1,4 @@
-import {deepCopy, randomEnum} from "../globals";
+import {deepCopy, randomEnum} from '../globals';
 
 export const COLUMNS = 20;
 export const ROWS = 25;
@@ -7,16 +7,16 @@ export class Grid {
   private readonly cells: Cell[][];
 
   constructor() {
-    let rows = new Array(ROWS);
+    const rows = new Array(ROWS);
 
-    for (let row of rows) {
-      row.push(new Array<Cell>(COLUMNS))
+    for (let i = 0; i < ROWS; i++) {
+      rows[i] = new Array<Cell>(COLUMNS);
     }
 
-    this.cells = rows
+    this.cells = rows;
   }
 
-  public rows() {
+  public rows(): Cell[][] {
     return deepCopy(this.cells);
   }
 
@@ -24,14 +24,14 @@ export class Grid {
     return deepCopy(this.cells[row]);
   }
 
-  public cell(row: number, column: number) {
+  public cell(row: number, column: number): Cell {
     return this.cells[row][column];
   }
 
-  public populate() {
-    for (let x = 0; x < COLUMNS; x++) {
-      for (let y = 0; y < ROWS; y++) {
-        this.cells[x][y] = new Cell('white', randomEnum(Figure))
+  public populate(): void {
+    for (let x = 0; x < ROWS; x++) {
+      for (let y = 0; y < COLUMNS; y++) {
+        this.cells[x][y] = new Cell('white', randomEnum(Figure));
       }
     }
   }

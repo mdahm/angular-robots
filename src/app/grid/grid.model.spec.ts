@@ -1,17 +1,19 @@
-import {COLUMNS, Grid, ROWS} from "./grid.model";
+import {COLUMNS, Grid, ROWS} from './grid.model';
 
 describe('Grid', () => {
-  let objectUnderTest = new Grid();
+  const objectUnderTest = new Grid();
 
-  test("populate", () => {
+  test('populate', () => {
+    const rows = objectUnderTest.rows();
+    const columns = objectUnderTest.columns(2);
+    let cell = objectUnderTest.cell(2, 2);
+
+    expect(rows.length).toBe(ROWS);
+    expect(columns.length).toBe(COLUMNS);
+    expect(cell).toBeUndefined();
+
     objectUnderTest.populate();
-
-    let rows = objectUnderTest.rows()
-    let columns = objectUnderTest.columns(2)
-    let cell = objectUnderTest.cell(2, 2)
-
-    expect(rows.length).toBe(ROWS)
-    expect(columns.length).toBe(COLUMNS)
-    expect(cell.color).toBe('white')
-  })
-})
+    cell = objectUnderTest.cell(2, 2);
+    expect(cell.color).toBe('white');
+  });
+});
