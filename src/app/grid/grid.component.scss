@@ -1,0 +1,55 @@
+.icon {
+  background-position: center;
+  background-repeat: no-repeat;
+
+  &.player {
+    background-image: url('../../assets/icons/player-small.png');
+  }
+
+  &.robot {
+    background-image: url('../../assets/icons/robot-small.png');
+  }
+
+  &.trash {
+    background-image: url('../../assets/icons/trash-small.png');
+  }
+}
+//
+//.jens {
+//  width: 100%;
+//  //table-layout:fixed;
+//  background: aqua;
+//}
+//
+//.hippe {
+//  width: 500px;
+//  height: 130px;
+//}
+
+//
+//table {
+//  width: 100%;
+//  border:1px solid #FF0000;
+//}
+//
+//td {
+//  width: 33.33%;
+//  position: relative;
+//}
+//
+//td:after {
+//  content: '';
+//  display: block;
+//  margin-top: 100%;
+//  border:1px solid #000000;
+//}
+//
+//td .content {
+//  //position: absolute;
+//  //top: 0;
+//  //bottom: 0;
+//  //left: 0;
+//  //right: 0;
+//  border:1px solid #000000;
+//  background: gold;
+//}

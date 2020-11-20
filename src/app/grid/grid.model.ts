@@ -1,7 +1,7 @@
 import {deepCopy, randomEnum} from '../globals';
 
-export const COLUMNS = 20;
-export const ROWS = 25;
+export const COLUMNS = 12;
+export const ROWS = 20;
 
 export class Grid {
   private readonly cells: Cell[][];
@@ -41,7 +41,21 @@ export class Cell {
   constructor(
     public color: string = 'white',
     public content: Figure = Figure.EMPTY
-  ) {
+  ) {  }
+
+  public name(): string {
+    switch (this.content) {
+      case Figure.EMPTY:
+        return '';
+      case Figure.PLAYER:
+        return 'Player';
+      case Figure.ROBOT_ALIVE:
+        return 'Robot';
+      case Figure.ROBOT_TRASH:
+        return 'Trash';
+      default:
+        return '???';
+    }
   }
 }
 
