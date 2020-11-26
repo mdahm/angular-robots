@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {Grid} from './grid.model';
+import {Component, OnInit} from '@angular/core';
+import {GridProviderService} from './grid-provider-service';
 
 @Component({
   selector: 'app-grid',
@@ -7,11 +7,15 @@ import {Grid} from './grid.model';
   styleUrls: ['./grid.component.scss']
 })
 export class GridComponent implements OnInit {
-  readonly grid = new Grid();
+  private gridProvider: GridProviderService;
 
-  constructor() { }
+  constructor(gridprovider: GridProviderService) {
+    this.gridProvider = gridprovider;
+  }
+
+  public grid = () => this.gridProvider.grid()
 
   ngOnInit(): void {
-    this.grid.populate();
+    this.gridProvider.grid().populate();
   }
 }
