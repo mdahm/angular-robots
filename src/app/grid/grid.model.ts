@@ -1,4 +1,5 @@
 import {deepCopy, random} from '../globals';
+import {Cell, Figure, Player, Position} from './cell.model';
 
 export const COLUMNS = 30;
 export const ROWS = 15;
@@ -6,7 +7,7 @@ export const ROBOTS = 5;
 
 export class Grid {
   private readonly cells: Cell[][];
-  private playerPosition: Position;
+  private player: Player;
 
   constructor() {
     const rows = new Array(ROWS);
@@ -29,9 +30,9 @@ export class Grid {
   public allCells(): Array<Cell> {
     const result = new Array<Cell>();
 
-    for (let i = 0; i < ROWS; i++) {
-      for (let j = 0; j < COLUMNS; j++) {
-        result.push(this.cells[i][j]);
+    for (let row = 0; row < ROWS; row++) {
+      for (let column = 0; column < COLUMNS; column++) {
+        result.push(this.cells[row][column]);
       }
     }
 
@@ -39,23 +40,22 @@ export class Grid {
     return result;
   }
 
-
   public populate(): void {
     this.clear();
 
-    this.placeFigures(ROBOTS, (position: Position) => new Cell('white', Figure.ROBOT_ALIVE, position));
-    this.playerPosition = this.placeFigures(1, (position: Position) => new Cell('white', Figure.PLAYER, position));
+    this.placeFigures(ROBOTS, (position: Position) => new Cell('white', Figure.ROBOT_ALIVE, position, this));
+    this.player = this.placeFigures(1, (position: Position) => new Player(position, this));
   }
 
   private clear() {
     for (let row = 0; row < ROWS; row++) {
       for (let column = 0; column < COLUMNS; column++) {
-        this.setCell(row, column, new Cell('white', Figure.EMPTY, new Position(row, column)));
+        this.setCell(row, column, new Cell('white', Figure.EMPTY, new Position(row, column), this));
       }
     }
   }
 
-  private placeFigures(number: number, creator: (position: Position) => Cell): Position {
+  private placeFigures(number: number, creator: (position: Position) => Cell): Cell {
     let figuresLeft = number;
 
     while (figuresLeft > 0) {
@@ -68,51 +68,12 @@ export class Grid {
       }
 
       if (figuresLeft == 0) {
-        return {row, column};
+        return this.cell(row, column);
       }
     }
   }
 
   public columnCount = () => COLUMNS;
-  // public rowCount = () => ROWS;
+  public rowCount = () => ROWS;
 }
 
-class Position {
-  constructor(public readonly row: number, public readonly column: number) {
-  }
-}
-
-export class Cell {
-  constructor(
-    public readonly color: string = 'white',
-    public readonly content: Figure = Figure.EMPTY,
-    public readonly position: Position
-  ) {
-  }
-
-  public name(): string {
-    switch (this.content) {
-      case Figure.EMPTY:
-        return 'empty';
-      case Figure.PLAYER:
-        return 'Player';
-      case Figure.ROBOT_ALIVE:
-        return 'Robot';
-      case Figure.ROBOT_TRASH:
-        return 'Trash';
-      default:
-        return '???';
-    }
-  }
-
-  imageName = () => this.name().toLowerCase() + '-small.png';
-
-  empty = () => this.content == Figure.EMPTY;
-}
-
-export enum Figure {
-  EMPTY,
-  ROBOT_ALIVE,
-  ROBOT_TRASH,
-  PLAYER
-}

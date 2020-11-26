@@ -1,4 +1,5 @@
-import {Cell, COLUMNS, Figure, Grid, ROBOTS, ROWS} from './grid.model';
+import {COLUMNS, Grid, ROBOTS, ROWS} from './grid.model';
+import {Cell, Figure} from './cell.model';
 
 describe('Grid', () => {
   const objectUnderTest = new Grid();
