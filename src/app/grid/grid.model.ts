@@ -1,4 +1,4 @@
-import {deepCopy, random, randomEnum} from '../globals';
+import {deepCopy, random} from '../globals';
 
 export const COLUMNS = 30;
 export const ROWS = 15;
@@ -39,21 +39,30 @@ export class Grid {
   }
 
   public populate(): void {
+    this.clear();
+
+    this.placeFigures(ROBOTS, () => new Cell('white', Figure.ROBOT_ALIVE));
+    this.placeFigures(1, () => new Cell('white', Figure.PLAYER));
+  }
+
+  private clear() {
     for (let x = 0; x < ROWS; x++) {
       for (let y = 0; y < COLUMNS; y++) {
         this.setCell(x, y, new Cell('white', Figure.EMPTY));
       }
     }
+  }
 
-    let robotsLeft = ROBOTS;
+  private placeFigures(number: number, creator: () => Cell) {
+    let figuresLeft = number;
 
-    while (robotsLeft > 0) {
+    while (figuresLeft > 0) {
       let row = random(0, ROWS - 1);
       let column = random(0, COLUMNS - 1);
 
       if (this.cell(row, column).empty()) {
-        this.setCell(row, column, new Cell('white', Figure.ROBOT_ALIVE));
-        robotsLeft--;
+        this.setCell(row, column, creator());
+        figuresLeft--;
       }
     }
   }
