@@ -23,8 +23,13 @@ export class GameController {
   }
 
   private checkMove(event: KeyboardEvent): Position {
-    const player = this.gridProvider.grid.player;
+    const grid = this.gridProvider.grid;
+    const player = grid.player;
     const actionMap = {
+      // Stay
+      '.': () => player.position,
+      // Teleport
+      't': () => grid.findEmptyPosition(),
       'ArrowLeft': () => player.mayMoveLeft(),
       'ArrowRight': () => player.mayMoveRight(),
       'ArrowUp': () => player.mayMoveUp(),
