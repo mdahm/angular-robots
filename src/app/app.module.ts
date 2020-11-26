@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { GridComponent } from './grid/grid.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {GameController} from './controller/game-controller.service';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatGridListModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [GameController],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -18,4 +18,8 @@ export class GridComponent implements OnInit {
   ngOnInit(): void {
     this.gridProvider.grid().populate();
   }
+
+  keyPress(event: KeyboardEvent) {
+    console.log(event);
+  }
 }

@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {GridProviderService} from './grid/grid-provider-service';
+import {GameController} from './controller/game-controller.service';
 
 @Component({
   selector: 'app-root',
@@ -7,10 +8,16 @@ import {GridProviderService} from './grid/grid-provider-service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  gridProvider: GridProviderService;
+  private controller: GameController;
 
-  constructor(gridprovider: GridProviderService) {
-    this.gridProvider = gridprovider;
+  constructor(controller: GameController) {
+    this.controller = controller;
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  // @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    this.controller.handleKeyboardEvent(event);
   }
 
   ngOnInit(): void {
