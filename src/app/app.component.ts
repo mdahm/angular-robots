@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Grid} from './grid/grid.model';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +6,6 @@ import {Grid} from './grid/grid.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  private readonly grid = new Grid();
-
   ngOnInit(): void {
-    this.grid.populate();
   }
 }
