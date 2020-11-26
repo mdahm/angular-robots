@@ -1,5 +1,6 @@
-import {HostListener, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {GridProviderService} from '../grid/grid-provider-service';
+import {Position} from '../grid/cell.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,24 @@ export class GameController {
   }
 
   handleKeyboardEvent(event: KeyboardEvent) {
-    console.log(event);
+    const newPosition: Position = this.checkMove(event);
+
+    if (newPosition != null) {
+      const grid = this.gridProvider.grid;
+
+      grid.updatePlayerPosition(newPosition);
+    }
+  }
+
+  private checkMove(event: KeyboardEvent): Position {
+    const player = this.gridProvider.grid.player;
+    const actionMap = {
+      'ArrowLeft': () => player.mayMoveLeft(),
+      'ArrowRight': () => player.mayMoveRight(),
+      'ArrowUp': () => player.mayMoveUp(),
+      'ArrowDown': () => player.mayMoveDown()
+    }[event.key];
+
+    return actionMap?.();
   }
 }

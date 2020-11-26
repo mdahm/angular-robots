@@ -9,10 +9,37 @@ export class Cell {
   ) {
   }
 
-  public mayMoveLeft = () => this.position.column > 0;
-  public mayMoveRight = () => this.position.column < this.grid.columnCount() - 1;
-  public mayMoveUp = () => this.position.row > 0;
-  public mayMoveDown = () => this.position.row < this.grid.rowCount() - 1;
+  public mayMoveLeft(): Position {
+    if (this.position.column > 0) {
+      return new Position(this.position.row, this.position.column - 1);
+    } else {
+      return null;
+    }
+  }
+
+  public mayMoveRight(): Position {
+    if (this.position.column < this.grid.columnCount() - 1) {
+      return new Position(this.position.row, this.position.column + 1);
+    } else {
+      return null;
+    }
+  }
+
+  public mayMoveUp(): Position {
+    if (this.position.row > 0) {
+      return new Position(this.position.row - 1, this.position.column);
+    } else {
+      return null;
+    }
+  }
+
+  public mayMoveDown(): Position {
+    if (this.position.row < this.grid.rowCount() - 1) {
+      return new Position(this.position.row + 1, this.position.column);
+    } else {
+      return null;
+    }
+  }
 
   public name(): string {
     switch (this.content) {

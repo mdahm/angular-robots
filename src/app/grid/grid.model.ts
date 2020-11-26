@@ -78,5 +78,13 @@ export class Grid {
 
   public columnCount = () => COLUMNS;
   public rowCount = () => ROWS;
+
+  updatePlayerPosition(newPosition: Position) {
+    const oldPosition = this._player.position;
+
+    this.setCell(oldPosition.row, oldPosition.column, new Cell('white', Figure.EMPTY, oldPosition, this))
+    this._player = new Player(newPosition, this);
+    this.setCell(newPosition.row, newPosition.column, this._player)
+  }
 }
 

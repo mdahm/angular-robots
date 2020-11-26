@@ -5,12 +5,14 @@ import {Injectable} from '@angular/core';
   providedIn: 'root',
 })
 export class GridProviderService {
-  private internalGrid = new Grid();
+  private _grid = new Grid();
 
-  public readonly grid = () => this.internalGrid;
+  get grid(): Grid {
+    return this._grid;
+  }
 
   public restart(): void {
-    this.internalGrid = new Grid();
-    this.internalGrid.populate();
+    this._grid = new Grid();
+    this._grid.populate();
   }
 }
