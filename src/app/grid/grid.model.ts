@@ -1,4 +1,4 @@
-import {deepCopy, random} from '../globals';
+import {random} from '../globals';
 import {Cell, Figure, Player, Position} from './cell.model';
 
 export const COLUMNS = 30;
@@ -7,7 +7,7 @@ export const ROBOTS = 5;
 
 export class Grid {
   private readonly cells: Cell[][];
-  private player: Player;
+  private _player: Player;
 
   constructor() {
     const rows = new Array(ROWS);
@@ -19,9 +19,9 @@ export class Grid {
     this.cells = rows;
   }
 
-  public rows = () => deepCopy(this.cells);
+  public rows = () => this.cells;
 
-  public columns = (row: number) => deepCopy(this.cells[row]);
+  public columns = (row: number) => this.cells[row];
 
   public cell = (row: number, column: number) => this.cells[row][column];
 
@@ -36,15 +36,18 @@ export class Grid {
       }
     }
 
-    // Should be copy
     return result;
+  }
+
+  get player(): Player {
+    return this._player;
   }
 
   public populate(): void {
     this.clear();
 
     this.placeFigures(ROBOTS, (position: Position) => new Cell('white', Figure.ROBOT_ALIVE, position, this));
-    this.player = this.placeFigures(1, (position: Position) => new Player(position, this));
+    this._player = this.placeFigures(1, (position: Position) => new Player(position, this));
   }
 
   private clear() {

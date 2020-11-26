@@ -1,5 +1,5 @@
 import {COLUMNS, Grid, ROBOTS, ROWS} from './grid.model';
-import {Cell, Figure} from './cell.model';
+import {Figure} from './cell.model';
 
 describe('Grid', () => {
   const objectUnderTest = new Grid();
@@ -18,16 +18,13 @@ describe('Grid', () => {
     expect(cell.color).toBe('white');
   });
 
-  test('immutable', () => {
+  test('positions', () => {
     objectUnderTest.populate();
-
-    const cells = objectUnderTest.columns(2);
-    cells[2] = new Cell('red', Figure.ROBOT_TRASH);
-
-    const cell = objectUnderTest.cell(2, 2);
-    expect(cell.color).toBe('white');
 
     let robots = objectUnderTest.allCells().map(cell => cell.content).filter(value => value == Figure.ROBOT_ALIVE).length;
     expect(robots).toBe(ROBOTS);
+
+    let player = objectUnderTest.player;
+    expect(objectUnderTest.cell(player.position.row, player.position.column)).toEqual(player);
   });
 });
