@@ -1,6 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import {GridProviderService} from './grid/grid-provider-service';
 import {GameController} from './controller/game-controller.service';
+import {GridProviderService} from './grid/grid-provider-service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +8,7 @@ import {GameController} from './controller/game-controller.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  private controller: GameController;
-
-  constructor(controller: GameController) {
-    this.controller = controller;
+  constructor(readonly gridProvider: GridProviderService, private readonly controller: GameController) {
   }
 
   @HostListener('window:keydown', ['$event'])

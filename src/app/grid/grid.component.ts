@@ -7,10 +7,7 @@ import {GridProviderService} from './grid-provider-service';
   styleUrls: ['./grid.component.scss']
 })
 export class GridComponent implements OnInit {
-  private gridProvider: GridProviderService;
-
-  constructor(gridprovider: GridProviderService) {
-    this.gridProvider = gridprovider;
+  constructor(private readonly gridProvider: GridProviderService) {
   }
 
   public grid = () => this.gridProvider.grid()

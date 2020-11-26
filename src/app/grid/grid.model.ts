@@ -6,6 +6,7 @@ export const ROBOTS = 5;
 
 export class Grid {
   private readonly cells: Cell[][];
+  private playerPosition: Position;
 
   constructor() {
     const rows = new Array(ROWS);
@@ -38,22 +39,23 @@ export class Grid {
     return result;
   }
 
+
   public populate(): void {
     this.clear();
 
-    this.placeFigures(ROBOTS, () => new Cell('white', Figure.ROBOT_ALIVE));
-    this.placeFigures(1, () => new Cell('white', Figure.PLAYER));
+    this.placeFigures(ROBOTS, (position: Position) => new Cell('white', Figure.ROBOT_ALIVE, position));
+    this.playerPosition = this.placeFigures(1, (position: Position) => new Cell('white', Figure.PLAYER, position));
   }
 
   private clear() {
-    for (let x = 0; x < ROWS; x++) {
-      for (let y = 0; y < COLUMNS; y++) {
-        this.setCell(x, y, new Cell('white', Figure.EMPTY));
+    for (let row = 0; row < ROWS; row++) {
+      for (let column = 0; column < COLUMNS; column++) {
+        this.setCell(row, column, new Cell('white', Figure.EMPTY, new Position(row, column)));
       }
     }
   }
 
-  private placeFigures(number: number, creator: () => Cell) {
+  private placeFigures(number: number, creator: (position: Position) => Cell): Position {
     let figuresLeft = number;
 
     while (figuresLeft > 0) {
@@ -61,20 +63,30 @@ export class Grid {
       let column = random(0, COLUMNS - 1);
 
       if (this.cell(row, column).empty()) {
-        this.setCell(row, column, creator());
+        this.setCell(row, column, creator(new Position(row, column)));
         figuresLeft--;
+      }
+
+      if (figuresLeft == 0) {
+        return {row, column};
       }
     }
   }
 
   public columnCount = () => COLUMNS;
-  public rowCount = () => ROWS;
+  // public rowCount = () => ROWS;
+}
+
+class Position {
+  constructor(public readonly row: number, public readonly column: number) {
+  }
 }
 
 export class Cell {
   constructor(
-    public color: string = 'white',
-    public content: Figure = Figure.EMPTY
+    public readonly color: string = 'white',
+    public readonly content: Figure = Figure.EMPTY,
+    public readonly position: Position
   ) {
   }
 
