@@ -20,6 +20,10 @@ export class GameController {
       grid.updatePlayerPosition(newPlayerPosition);
       this.updateRobotPositions();
     }
+
+    if(this.allRobots().length == 0){
+      alert('YOU WIN!!!!!');
+    }
   }
 
   private updateRobotPositions() {
@@ -37,25 +41,38 @@ export class GameController {
   }
 
   private robots(handled: Robot[]): Robot[] {
-    const grid = this.gridProvider.grid;
     const robotIds: String[] = handled.map((robot: Robot) => robot.identity);
 
-    return grid.allCells().filter((cell) => cell.content.type == FigureType.ROBOT_ALIVE)
+    return this.allRobots()
       .filter((cell) => !robotIds.includes(cell.content.identity))
       .map((cell) => cell.content);
   }
 
+  private allRobots() {
+    const grid = this.gridProvider.grid;
+    return grid.allCells().filter((cell) => cell.content.type == FigureType.ROBOT_ALIVE);
+  }
+
   private static computeNextMove(robot: Position, player: Position): Position {
-    if (robot.row < player.row) {
-      return new Position(robot.row + 1, robot.column);
-    } else if (robot.row > player.row) {
-      return new Position(robot.row - 1, robot.column);
-    } // rows are equal
-    else if (robot.column > player.column) {
-      return new Position(robot.row, robot.column - 1);
+    const rowDistance = Math.abs(robot.row - player.row);
+    const columnDistance = Math.abs(robot.column - player.column);
+    const preferRow = rowDistance > columnDistance;
+
+    if (preferRow) {
+      if (robot.row < player.row) {
+        return new Position(robot.row + 1, robot.column);
+      } else if (robot.row > player.row) {
+        return new Position(robot.row - 1, robot.column);
+      }
     } else {
-      return new Position(robot.row, robot.column + 1);
+      if (robot.column > player.column) {
+        return new Position(robot.row, robot.column - 1);
+      } else if (robot.column < player.column) {
+        return new Position(robot.row, robot.column + 1);
+      }
     }
+
+    return robot;
   }
 
   private checkMove(event: KeyboardEvent): Position {
