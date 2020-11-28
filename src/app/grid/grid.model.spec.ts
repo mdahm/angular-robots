@@ -1,5 +1,5 @@
 import {COLUMNS, Grid, ROBOTS, ROWS} from './grid.model';
-import {Figure} from './cell.model';
+import {FigureType} from './cell.model';
 
 describe('Grid', () => {
   const objectUnderTest = new Grid();
@@ -21,7 +21,7 @@ describe('Grid', () => {
   test('positions', () => {
     objectUnderTest.populate();
 
-    let robots = objectUnderTest.allCells().map(cell => cell.content).filter(value => value == Figure.ROBOT_ALIVE).length;
+    let robots = objectUnderTest.allCells().map(cell => cell.content).filter(value => value == FigureType.ROBOT_ALIVE).length;
     expect(robots).toBe(ROBOTS);
 
     let player = objectUnderTest.player;

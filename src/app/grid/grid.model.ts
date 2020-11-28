@@ -1,5 +1,5 @@
 import {random} from '../globals';
-import {Cell, Figure, Player, Position} from './cell.model';
+import {Cell, Figure, FigureType, Player, Position, Robot} from './cell.model';
 
 export const COLUMNS = 30;
 export const ROWS = 15;
@@ -17,6 +17,7 @@ export class Grid {
     }
 
     this.cells = rows;
+    this._player = null;
   }
 
   public rows = () => this.cells;
@@ -46,32 +47,33 @@ export class Grid {
   public populate(): void {
     this.clear();
 
-    this.placeFigures(ROBOTS, (position: Position) => new Cell('white', Figure.ROBOT_ALIVE, position, this));
-    this._player = this.placeFigures(1, (position: Position) => new Player(position, this));
+    this.placeFigures(ROBOTS, (cell: Cell) => new Robot(cell));
+    this._player = this.placeFigures(1, (cell: Cell) => new Player(cell));
   }
 
   private clear() {
     for (let row = 0; row < ROWS; row++) {
       for (let column = 0; column < COLUMNS; column++) {
-        this.setCell(row, column, new Cell('white', Figure.EMPTY, new Position(row, column), this));
+        this.setCell(row, column, new Cell('white', new Position(row, column), this));
       }
     }
   }
 
-  private placeFigures(number: number, creator: (position: Position) => Cell): Cell {
+  private placeFigures(number: number, creator: (cell: Cell) => Figure): Figure {
     let figuresLeft = number;
 
     while (figuresLeft > 0) {
-      let row = random(0, ROWS - 1);
-      let column = random(0, COLUMNS - 1);
+      const row = random(0, ROWS - 1);
+      const column = random(0, COLUMNS - 1);
+      const cell = this.cell(row, column);
 
-      if (this.cell(row, column).empty()) {
-        this.setCell(row, column, creator(new Position(row, column)));
+      if (cell.empty()) {
+        cell.content = creator(cell);
         figuresLeft--;
       }
 
       if (figuresLeft == 0) {
-        return this.cell(row, column);
+        return cell.content;
       }
     }
   }
@@ -90,12 +92,43 @@ export class Grid {
   public columnCount = () => COLUMNS;
   public rowCount = () => ROWS;
 
-  updatePlayerPosition(newPosition: Position) {
-    const oldPosition = this._player.position;
-
-    this.setCell(oldPosition.row, oldPosition.column, new Cell('white', Figure.EMPTY, oldPosition, this));
-    this._player = new Player(newPosition, this);
-    this.setCell(newPosition.row, newPosition.column, this._player);
+  updatePlayerPosition(newPlayerPosition: Position) {
+    const oldPosition = this._player.cell.position;
+    const oldCell = this.cell(oldPosition.row, oldPosition.column);
+    const newCell = this.cell(newPlayerPosition.row, newPlayerPosition.column);
+    oldCell.content = new Figure(FigureType.EMPTY, oldCell);
+    newCell.content = this._player;
   }
+
+  updateRobotPosition(robot: Robot, newRobotPosition: Position) {
+    const oldPosition = robot.cell.position;
+    const oldCell = this.cell(oldPosition.row, oldPosition.column);
+    const newCell = this.cell(newRobotPosition.row, newRobotPosition.column);
+    const newFigureType = Grid.computeNewFigure(newCell);
+    const newFigure = newFigureType == FigureType.ROBOT_ALIVE ? robot : new Figure(newFigureType, newCell);
+
+    oldCell.content = new Figure(FigureType.EMPTY, oldCell);
+    newCell.content = newFigure;
+
+    if (newRobotPosition.equals(this._player.cell.position)) {
+      alert('Game over!!!');
+      this._player = null;
+    }
+  }
+
+  private static computeNewFigure(cell: Cell): FigureType {
+    switch (cell.content.type) {
+      case FigureType.ROBOT_TRASH:
+      case FigureType.ROBOT_ALIVE:
+        return FigureType.ROBOT_TRASH;
+      case FigureType.EMPTY:
+      case FigureType.PLAYER:
+        return FigureType.ROBOT_ALIVE;
+      default:
+        alert('Ooops');
+    }
+  }
+
+  gameOver = () => this._player == null;
 }
 

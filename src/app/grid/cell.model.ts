@@ -1,12 +1,23 @@
 import {Grid} from './grid.model';
+import {v4 as uuid} from 'uuid';
 
 export class Cell {
+  private _content: Figure = new Figure(FigureType.EMPTY, this);
+
   constructor(
     public readonly color: string = 'white',
-    public readonly content: Figure = Figure.EMPTY,
     public readonly position: Position,
-    private readonly grid: Grid
+    private readonly grid: Grid,
   ) {
+  }
+
+  set content(figure: Figure) {
+    this._content = figure;
+    figure.cell = this;
+  }
+
+  get content(): Figure {
+    return this._content;
   }
 
   public mayMoveLeft(): Position {
@@ -41,33 +52,52 @@ export class Cell {
     }
   }
 
+  name = () => this._content.name();
+
+  imageName = () => this.name().toLowerCase() + '-small.png';
+
+  empty = () => this._content.type == FigureType.EMPTY;
+}
+
+export class Figure {
+  public readonly identity: String = uuid();
+
+  constructor(public readonly type: FigureType, public cell: Cell) {
+  }
+
   public name(): string {
-    switch (this.content) {
-      case Figure.EMPTY:
+    switch (this.type) {
+      case FigureType.EMPTY:
         return 'empty';
-      case Figure.PLAYER:
+      case FigureType.PLAYER:
         return 'Player';
-      case Figure.ROBOT_ALIVE:
+      case FigureType.ROBOT_ALIVE:
         return 'Robot';
-      case Figure.ROBOT_TRASH:
+      case FigureType.ROBOT_TRASH:
         return 'Trash';
       default:
         return '???';
     }
   }
 
-  imageName = () => this.name().toLowerCase() + '-small.png';
-
-  empty = () => this.content == Figure.EMPTY;
-}
-
-export class Player extends Cell {
-  constructor(position: Position, grid: Grid) {
-    super('white', Figure.PLAYER, position, grid);
+  equals(that: Figure): boolean {
+    return this.identity == that.identity;
   }
 }
 
-export enum Figure {
+export class Player extends Figure {
+  constructor(cell: Cell) {
+    super(FigureType.PLAYER, cell);
+  }
+}
+
+export class Robot extends Figure {
+  constructor(cell: Cell) {
+    super(FigureType.ROBOT_ALIVE, cell);
+  }
+}
+
+export enum FigureType {
   EMPTY,
   ROBOT_ALIVE,
   ROBOT_TRASH,
@@ -76,5 +106,9 @@ export enum Figure {
 
 export class Position {
   constructor(public readonly row: number, public readonly column: number) {
+  }
+
+  public equals(that: Position): boolean {
+    return this.row == that.row && this.column == that.column;
   }
 }
