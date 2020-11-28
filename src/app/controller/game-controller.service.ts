@@ -15,14 +15,22 @@ export class GameController {
   handleKeyboardEvent(event: KeyboardEvent) {
     const newPlayerPosition: Position = this.checkMove(event);
     const grid = this.gridProvider.grid;
+    const cell = grid.cell(newPlayerPosition.row, newPlayerPosition.column);
+    const cellEmpty = cell.content.type == FigureType.EMPTY || cell.content.type == FigureType.PLAYER;
 
-    if (newPlayerPosition != null && !grid.gameOver()) {
+    if (!cellEmpty) {
+      alert('Impossible move');
+    }
+
+    // noinspection PointlessBooleanExpressionJS
+    if (newPlayerPosition != null && !grid.gameOver() && cellEmpty) {
       grid.updatePlayerPosition(newPlayerPosition);
       this.updateRobotPositions();
     }
 
-    if(this.allRobots().length == 0){
+    if (this.allRobots().length == 0) {
       alert('YOU WIN!!!!!');
+      this.gridProvider.restart();
     }
   }
 
