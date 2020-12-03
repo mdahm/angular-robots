@@ -1,6 +1,8 @@
 
 <mat-grid-list cols="{{grid().columnCount()}}" rowHeight="1:1">
   <!--    (keydown.arrowDown)="cell"-->
+  <!-- Function called way too often -->
+
   <mat-grid-tile
     *ngFor="let cell of grid().allCells()"
     [style.background]="cell.color"
