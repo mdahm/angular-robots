@@ -21,10 +21,10 @@ describe('Grid', () => {
   test('positions', () => {
     objectUnderTest.populate();
 
-    let robots = objectUnderTest.allCells().map(cell => cell.content).filter(value => value == FigureType.ROBOT_ALIVE).length;
+    let robots = objectUnderTest.allCells().map(cell => cell.content.type).filter(value => value == FigureType.ROBOT_ALIVE).length;
     expect(robots).toBe(ROBOTS);
 
     let player = objectUnderTest.player;
-    expect(objectUnderTest.cell(player.position.row, player.position.column)).toEqual(player);
+    expect(objectUnderTest.cell(player.cell.position.row, player.cell.position.column).content).toEqual(player);
   });
 });
